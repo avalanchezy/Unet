@@ -6,6 +6,19 @@ Welcome to the repository for our project "Continuous Learning for Medical Image
 
 The objective of this project is to establish a robust machine learning framework that can continually learn from new data, thereby improving its performance in segmenting medical images. By employing continuous learning strategies, our models are designed to adapt to new patterns in data without forgetting previously learned information.
 
+## System Requirements
+
+To run the models and training scripts in this repository, you will need a system with the following:
+
+- CUDA 11.8
+- cuDNN 8.1
+
+Please ensure that you have these versions installed and properly configured on your system. They are essential for leveraging GPU acceleration with TensorFlow.
+
+## TensorFlow Environment
+
+The code in this repository is developed for TensorFlow. It is recommended to use a virtual environment for Python to manage dependencies. After setting up CUDA and cuDNN, install the required Python packages using:
+
 ## Repository Contents
 
 - `Segmentation_TF2_Unet.ipynb`: A Jupyter notebook containing the pipeline for training our first U-Net model on the CAMUS dataset.
