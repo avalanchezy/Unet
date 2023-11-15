@@ -4,3 +4,4 @@ opencv-python
 medpy==0.4.0
 tqdm
 pandas
+tensorflow
