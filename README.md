@@ -1,10 +1,10 @@
-# Continuous Learning for Medical Image Segmentation
+# Continual Learning for Medical Image Segmentation
 
-Welcome to the repository for our project "Continuous Learning for Medical Image Segmentation," where we focus on developing and refining deep learning models capable of segmenting medical images with increasing accuracy over time. The CAMUS (Cardiac Acquisitions for Multi-structure Ultrasound Segmentation) dataset served as the starting point for training our initial U-Net model. We are poised to incorporate a second dataset to facilitate continuous learning and model improvement.
+Welcome to the repository for our project "Continual Learning for Medical Image Segmentation," where we focus on developing and refining deep learning models capable of segmenting medical images with increasing accuracy over time. The CAMUS (Cardiac Acquisitions for Multi-structure Ultrasound Segmentation) dataset served as the starting point for training our initial U-Net model. We are poised to incorporate a second dataset to facilitate continuous learning and model improvement.
 
 ## Overview
 
-The objective of this project is to establish a robust machine learning framework that can continually learn from new data, thereby improving its performance in segmenting medical images. By employing continuous learning strategies, our models are designed to adapt to new patterns in data without forgetting previously learned information.
+The objective of this project is to establish a robust machine learning framework that can continually learn from new data, thereby improving its performance in segmenting medical images. By employing continual learning strategies, our models are designed to adapt to new patterns in data without forgetting previously learned information.
 
 ## System Requirements
 
@@ -37,13 +37,13 @@ To begin working with the models in this repository:
 
 ```bash
 git clone https://github.com/avalanchezy/Unet/blob/main/Segmentation_TF2_Unet.ipynb
-cd continuous-learning-medical-segmentation
+cd continual-learning-medical-segmentation
 pip install -r requirements.txt
 ```
 
 ## Contribution
 
-We welcome contributions that help advance the project, whether by improving existing models, adding new datasets, or implementing continuous learning methods. Feel free to fork the repository, make your enhancements, and create a pull request.
+We welcome contributions that help advance the project, whether by improving existing models, adding new datasets, or implementing continual learning methods. Feel free to fork the repository, make your enhancements, and create a pull request.
 
 ## License
 
