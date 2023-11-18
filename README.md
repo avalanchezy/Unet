@@ -10,7 +10,7 @@ The objective of this project is to establish a robust machine learning framewor
 
 To run the models and training scripts in this repository, you will need a system with the following:
 
-- CUDA 11.8
+- CUDA 11.2
 - cuDNN 8.1
 
 Please ensure that you have these versions installed and properly configured on your system. They are essential for leveraging GPU acceleration with TensorFlow.
