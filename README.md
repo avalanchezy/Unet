@@ -8,7 +8,7 @@ The objective of this project is to establish a robust machine learning framewor
 
 ## Project Origin
 
-This project is inspired by and builds upon the work found at [CAMUS Hands-On](https://github.com/creatis-myriad/camus-hands-on.git). Our approach extends the methodologies and techniques presented there, focusing on continual learning and adaptation to new datasets in medical image segmentation.
+This project is inspired by and builds upon the work found at [CAMUS](https://github.com/creatis-myriad/camus-hands-on.git) by team Myriad of CREATIS Laboratory. Our approach extends the methodologies and techniques presented there, focusing on continual learning and adaptation to new datasets in medical image segmentation.
 
 ## System Requirements
 
