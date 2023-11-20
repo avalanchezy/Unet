@@ -14,8 +14,8 @@ This project is inspired by and builds upon the work found at [CAMUS Hands-On](h
 
 To run the models and training scripts in this repository, you will need a system with the following:
 
-- CUDA 11.2
-- cuDNN 8.1
+- [CUDA 11.2](https://developer.nvidia.com/cuda-11.2.0-download-archive)
+- [cuDNN 8.1](https://developer.nvidia.com/compute/machine-learning/cudnn/secure/8.1.1.33/11.2_20210301/cudnn-11.2-windows-x64-v8.1.1.33.zip)
 
 Please ensure that you have these versions installed and properly configured on your system. They are essential for leveraging GPU acceleration with TensorFlow.
 
