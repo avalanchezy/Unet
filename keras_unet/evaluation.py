@@ -3,7 +3,7 @@ import numpy as np
 from tqdm import tqdm 
 from medpy.metric.binary import hd, assd
 from tensorflow.keras.utils import to_categorical
-import numpy as np
+import pandas as pd
 
 def evaluate_segmentation(y_true, y_pred, voxel_spacing = [1., 1.]):
     """Compute Dices, Hausdorff distances and ASSD  (Average symmetric surface distance) between the predicted segmentation and the groundtruth"""
@@ -56,7 +56,7 @@ def evaluate_segmentation(y_true, y_pred, voxel_spacing = [1., 1.]):
     return dice, hausdorff, assds
 
 
-def evaluate_set(set_y_true, set_y_pred, voxel_spacing = [1.0, 1.0]):
+def evaluate_set_avr(set_y_true, set_y_pred, voxel_spacing = [1.0, 1.0]):
     s_d=np.zeros(set_y_true.shape[-1], dtype=np.float32)
     s_h=np.zeros(set_y_true.shape[-1], dtype=np.float32)
     s_a=np.zeros(set_y_true.shape[-1], dtype=np.float32)
@@ -68,6 +68,7 @@ def evaluate_set(set_y_true, set_y_pred, voxel_spacing = [1.0, 1.0]):
             [d, h, a] = evaluate_segmentation(y_true=set_y_true[ind, :, :, :],
                                                   y_pred=set_y_pred[ind, :, :, :],
                                                   voxel_spacing=voxel_spacing)
+
             for lab in range(set_y_true.shape[-1]):
                 if d[lab] is not None:
                     s_d[lab] += d[lab]
@@ -75,3 +76,27 @@ def evaluate_set(set_y_true, set_y_pred, voxel_spacing = [1.0, 1.0]):
                     s_a[lab] += a[lab]
                     valid_lab[lab] += 1
     return s_d/valid_lab, s_h/valid_lab, s_a/valid_lab, valid_lab
+
+
+def evaluate_set_each(set_y_true, set_y_pred, voxel_spacing = [1.0, 1.0],
+                 labels = ['all','label_1', 'label_2']):
+
+    # initiate a DataFrame
+    index_tuples = []
+    columns = ['Dice', 'Hausdorff','ASSD']
+    for column in columns:
+        for label in labels:
+            index_tuples.append((column, label))
+
+    column_multi_index = pd.MultiIndex.from_tuples(index_tuples)
+    df = pd.DataFrame(index=pd.RangeIndex(stop=len(set_y_pred),name='image index'), 
+                      columns=column_multi_index)
+
+    # compute metrics for each instance
+    for ind in tqdm(range(set_y_true.shape[0])):
+        if np.sum(set_y_true[ind, :, :, 1:])!=0:
+            [d, h, a] = evaluate_segmentation(y_true=set_y_true[ind, :, :, :],
+                                            y_pred=set_y_pred[ind, :, :, :],
+                                            voxel_spacing=voxel_spacing)
+            df.iloc[ind,:] = np.concatenate([d, h, a])
+    return df

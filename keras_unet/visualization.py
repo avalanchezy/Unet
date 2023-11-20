@@ -3,6 +3,8 @@ from matplotlib import cm
 from matplotlib.colors import ListedColormap
 
 from tqdm import tqdm 
+import random
+import colorsys
 
 import numpy as np
 
@@ -82,8 +84,14 @@ def save_overlay_segmentation(x, y, save_path=None, spacing=(1,1), step=1):
 
         
         
-def plot_compare_segmentation(x, y_true, y_pred, save_path=None, spacing=(1,1), step=1):  
+def plot_compare_segmentation(x, y_true, y_pred, save_path=None, spacing=(1,1), step=1,
+                              img_titles=None, pred_titles=None):  
     asp = spacing[0]/spacing[1]
+
+    if img_titles is None:
+        img_titles = ['MRI'] * x.shape[0]
+    if pred_titles is None:
+        pred_titles = ['Prediction'] * x.shape[0]
     
     for i in range(0, x.shape[0], step):
     # ground truth and prediction
@@ -107,7 +115,7 @@ def plot_compare_segmentation(x, y_true, y_pred, save_path=None, spacing=(1,1), 
         
         f, axarr = plt.subplots(1, 3)
         axarr[0].imshow(x[i, :, :, 0], 'gray', interpolation='none', aspect=asp)
-        axarr[0].set_title("MRI")
+        axarr[0].set_title(img_titles[i])
         axarr[0].axis('off')
         
         axarr[1].imshow(x[i, :, :, 0], 'gray', interpolation='none', aspect=asp)
@@ -117,7 +125,7 @@ def plot_compare_segmentation(x, y_true, y_pred, save_path=None, spacing=(1,1), 
 
         axarr[2].imshow(x[i, :, :, 0], 'gray', interpolation='none', aspect = asp)
         axarr[2].imshow(pred_color, interpolation='none', aspect=asp)
-        axarr[2].set_title('Prediction')
+        axarr[2].set_title(pred_titles[i])
         axarr[2].axis('off')
     
     
@@ -144,3 +152,43 @@ def plot_segm_history(history, metrics=['iou', 'val_iou'], losses=['loss', 'val_
     #plt.xticks(fontsize=35)
     plt.legend(losses, loc='center right', fontsize=15)
     plt.show()
+
+
+def plot_superposition(image, mask, ax, alpha=0.5):
+
+    # Display the image
+    ax.imshow(image, cmap='gray')
+
+    # Overlay the mask
+    ax.imshow(mask, cmap='jet', alpha=alpha)
+
+def visualize_BestWorstOnes(X_test, y_test, y_pred,df, metric, label, nb_show=2, show_best=True, show_worst=False, ):
+    ixs_show = []
+    ixs_ascend_sort = df.loc[:, (metric, label)].argsort().values  # ascending order
+    
+    if show_worst:
+        ixs_worst = ixs_ascend_sort[:nb_show]
+        ixs_show.append(ixs_worst)
+    
+    if show_best:
+        ixs_best = ixs_ascend_sort[-nb_show:]
+        ixs_show.append(ixs_best)
+    
+    ixs_show = np.concatenate(ixs_show)
+    print(ixs_show)
+    
+    # Prepare titles
+    metric_values = df.loc[:, (metric, label)][ixs_show].values
+    
+    titles_for_imgs = [f'MRI index_{ix}' for ix in ixs_show]
+    
+    titles_for_preds = [f"Pred ({metric}_{label} : {value:.3f})" for value in metric_values]
+    
+    # Call your plotting function here (plot_compare_segmentation or equivalent)
+    # Replace the function call below with your actual plotting function
+    plot_compare_segmentation(X_test[ixs_show, ], y_test[ixs_show, ], y_pred[ixs_show, ],
+                              " ", spacing=(1, 1), step=1, img_titles=titles_for_imgs,
+                              pred_titles=titles_for_preds)
+
+# Example usage:
+# visualize_metrics(df, 'Dice', 'all', nb_show=2, show_best=True, show_worst=False)
