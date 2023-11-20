@@ -6,6 +6,10 @@ Welcome to the repository for our project "Continual Learning for Medical Image 
 
 The objective of this project is to establish a robust machine learning framework that can continually learn from new data, thereby improving its performance in segmenting medical images. By employing continual learning strategies, our models are designed to adapt to new patterns in data without forgetting previously learned information.
 
+## Project Origin
+
+This project is inspired by and builds upon the work found at [CAMUS Hands-On](https://github.com/creatis-myriad/camus-hands-on.git). Our approach extends the methodologies and techniques presented there, focusing on continual learning and adaptation to new datasets in medical image segmentation.
+
 ## System Requirements
 
 To run the models and training scripts in this repository, you will need a system with the following:
