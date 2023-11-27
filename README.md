@@ -44,7 +44,7 @@ The initial U-Net model was trained on the CAMUS dataset. As we expand our datas
 To begin working with the models in this repository:
 
 ```bash
-git clone https://github.com/avalanchezy/Unet/blob/main/Segmentation_TF2_Unet.ipynb
+git clone [https://github.com/avalanchezy/Unet/blob/main/Segmentation_TF2_Unet.ipynb](https://github.com/avalanchezy/Unet.git)
 cd continual-learning-medical-segmentation
 pip install -r requirements.txt
 ```
