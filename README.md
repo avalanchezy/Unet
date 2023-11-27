@@ -49,7 +49,7 @@ git clone https://github.com/avalanchezy/Unet.git
 ```
 Use the Keras folder and Jupyter notebook file mentioned in this Repo to replace the original file.
 
-Please download [the trained model](https://drive.google.com/file/d/13mlaFQDDrcIzwMrgFWHL02xHTaNZwtVM/view?usp=sharing)
+Please download [the trained model](https://drive.google.com/file/d/13mlaFQDDrcIzwMrgFWHL02xHTaNZwtVM/view?usp=sharing).
 
 ## Contribution
 
