@@ -44,10 +44,12 @@ The initial U-Net model was trained on the CAMUS dataset. As we expand our datas
 To begin working with the models in this repository:
 
 ```bash
+git clone https://github.com/creatis-myriad/camus-hands-on.git
 git clone https://github.com/avalanchezy/Unet.git
-cd continual-learning-medical-segmentation
-pip install -r requirements.txt
 ```
+Use the Keras folder and Jupyter notebook file mentioned in this Repo to replace the original file.
+
+Please download [the trained model](https://drive.google.com/file/d/13mlaFQDDrcIzwMrgFWHL02xHTaNZwtVM/view?usp=sharing)
 
 ## Contribution
 
