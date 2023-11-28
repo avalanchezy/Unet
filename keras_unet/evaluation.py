@@ -78,8 +78,31 @@ def evaluate_set_avr(set_y_true, set_y_pred, voxel_spacing = [1.0, 1.0]):
     return s_d/valid_lab, s_h/valid_lab, s_a/valid_lab, valid_lab
 
 
+def evaluate_set_each3(set_y_true, set_y_pred, voxel_spacing = [1.0, 1.0],
+                 labels = ["All", "Myocardium", "Left Ventricle"]):
+
+    # initiate a DataFrame
+    index_tuples = []
+    columns = ['Dice', 'Hausdorff','ASSD']
+    for column in columns:
+        for label in labels:
+            index_tuples.append((column, label))
+
+    column_multi_index = pd.MultiIndex.from_tuples(index_tuples)
+    df = pd.DataFrame(index=pd.RangeIndex(stop=len(set_y_pred),name='image index'), 
+                      columns=column_multi_index)
+
+    # compute metrics for each instance
+    for ind in tqdm(range(set_y_true.shape[0])):
+        if np.sum(set_y_true[ind, :, :, 1:])!=0:
+            [d, h, a] = evaluate_segmentation(y_true=set_y_true[ind, :, :, :],
+                                            y_pred=set_y_pred[ind, :, :, :],
+                                            voxel_spacing=voxel_spacing)
+            df.iloc[ind,:] = np.concatenate([d, h, a])
+    return df
+
 def evaluate_set_each(set_y_true, set_y_pred, voxel_spacing = [1.0, 1.0],
-                 labels = ['all','label_1', 'label_2']):
+                 labels = ["All", "Right Ventricle", "Myocardium", "Left Ventricle"]):
 
     # initiate a DataFrame
     index_tuples = []
