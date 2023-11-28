@@ -1,5 +1,6 @@
 import cv2
 from tqdm import tqdm 
+import SimpleITK as sitk
 import numpy as np
 import glob
 import tensorflow as tf
@@ -8,6 +9,7 @@ from keras_unet.losses import dice_loss, dice_coef, adaptive_loss
 from tensorflow.keras import models
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
+import os
 
 
 # Select the pre-trained U-Net model
@@ -121,6 +123,42 @@ def load_CAMUS_dataset(images_path, img_size):
     return X, y
 
 
+def load_SUMAC_dataset(dataset_dir, img_size, extension="nii.gz",
+                        random_state=42):
+    
+    all_sub_dirs = os.listdir(dataset_dir)
+    all_sub_dirs.sort()
+
+    all_img_paths, all_mask_paths = [], []
+    for sub_dir in all_sub_dirs:
+        for suffix in ['ED', 'ES']:
+            img_name = f"{sub_dir}_img_{suffix}.{extension}"
+            mask_name = f"{sub_dir}_mask_{suffix}.{extension}"
+
+            img_path = os.path.join(dataset_dir, sub_dir, img_name)
+            mask_path = os.path.join(dataset_dir, sub_dir, mask_name)
+
+            if os.path.exists(img_path) and os.path.exists(mask_path):
+                all_img_paths.append(img_path)
+                all_mask_paths.append(mask_path)
+            else:
+                print(f'\n*** {img_path} or {mask_path} does not exist ! ***\n')
+
+    if random_state is not None:
+        np.random.seed(random_state)
+    permutation_index = np.random.permutation( len(all_img_paths))
+    images_files_rnd = [all_img_paths[i] for i in permutation_index]
+    masks_files_rnd = [all_mask_paths[i] for i in permutation_index]
+
+    # Reading images and corresponding labels
+    X = ReadImagesNIIGZ(images_files_rnd, size=(img_size, img_size))
+    y = ReadMasksNIIGZ(masks_files_rnd, size=(img_size, img_size))    
+    
+    # Return the images (X) and corresponding labels (y) into numpy array 
+    return X, y
+    # return images_files_rnd, masks_files_rnd
+
+
 # Runtime data augmentation
 def get_augmented(
     X_train, 
@@ -173,6 +211,7 @@ def ReadImages(images_files, size, crop=None):
     X = []
     for index in tqdm(range(len(images_files))):
         image_read = cv2.imread(images_files[index], cv2.IMREAD_GRAYSCALE)
+        # print(image_read.shape)
         if crop is not None:
             image_read = image_read[crop[0]:crop[2],crop[1]:crop[3]]
         image_read = cv2.resize(image_read, dsize = size, interpolation = cv2.INTER_LINEAR)
@@ -181,6 +220,22 @@ def ReadImages(images_files, size, crop=None):
     X = np.asarray(X, dtype=np.float32)
     X = np.expand_dims(X,-1)
     return X
+
+
+def ReadImagesNIIGZ(images_files, size, crop=None):
+    X = []
+    for index in tqdm(range(len(images_files))):
+        image_read = sitk.GetArrayFromImage(sitk.ReadImage(images_files[index]))
+        if crop is not None:
+            image_read = image_read[crop[0]:crop[2],crop[1]:crop[3]]
+        image_read = cv2.resize(image_read, dsize = size, interpolation = cv2.INTER_LINEAR)
+        image_read = image_read / 255.0
+        X.append(image_read)
+    X = np.asarray(X, dtype=np.float32)
+    X = np.expand_dims(X,-1)
+    return X
+
+
 
 # Reading masks
 def ReadMasks(images_files, size, crop=None):
@@ -195,5 +250,22 @@ def ReadMasks(images_files, size, crop=None):
     y[y==255]=3
     y[y==170]=2
     y[y==85]=1
+    y=tf.keras.utils.to_categorical(y)
+    return y
+
+
+# Reading masks
+def ReadMasksNIIGZ(images_files, size, crop=None):
+    y = []
+    for index in tqdm(range(len(images_files))):
+        image_read = sitk.GetArrayFromImage(sitk.ReadImage(images_files[index]))
+        if crop is not None:
+            image_read = image_read[crop[0]:crop[2],crop[1]:crop[3]]
+        image_read = cv2.resize(image_read, dsize = size, interpolation = cv2.INTER_NEAREST)
+        y.append(image_read)
+    y = np.asarray(y, dtype=np.int16) 
+    # y[y==255]=3
+    # y[y==170]=2
+    # y[y==85]=1
     y=tf.keras.utils.to_categorical(y)
     return y
