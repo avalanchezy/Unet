@@ -53,7 +53,7 @@ Please download [the trained model](https://drive.google.com/file/d/13mlaFQDDrcI
 
 ## Contribution
 
-We welcome contributions that help advance the project, whether by improving existing models, adding new datasets, or implementing continual learning methods. Feel free to fork the repository, make your enhancements, and create a pull request.
+This project is based on the works of Olivier Bernard and Thomas Grenier from the CREATIS laboratory (France).
 
 ## License
 
